@@ -13,36 +13,42 @@ const Home = () => {
         likesCount: '',
         dislikesCount: ''
     })
-   
+    const [status, setStatus] = useState('');
    
     useEffect(() => {
 
         const getJoke = async () => {
             const { data } = await axios.get('/api/randomjoke/getjoke');
-            setJoke(data);      
+            setJoke(data);   
+            const { data: interactionStatus } = await axios.get((`/api/randomjoke/getstatus?id=${data.id}`));
+            setStatus(interactionStatus);
         }
 
         getJoke();
+           
     }, [])
 
     const updateCounts = async () => {
-        const jokeId = joke.JokeId;
+        const jokeId = joke.id;
         const { data } = await axios.get(`/api/randomJoke/getlikescount/${jokeId}`); 
-        setJoke({ ...joke, likesCount: data.likes, dislikesCount: data.dislikes });  
+        setJoke({ ...joke, likesCount: data.likes, dislikesCount: data.disLikes });  
     }
 
-    setInterval(updateCounts, 500);
+
+    setInterval(updateCounts, 1000);
 
 
-    const onLikeClick = async (liked) => {   
-        const jokeId = joke.JokeId;
+    const onLikeClick = async (liked) => { 
+        const jokeId = joke.id;
         await axios.post(`/api/randomJoke/addlike`, { jokeId, liked });       
     }
 
+    const canLike = status != 'Liked';
+    const canDislike = status != 'Disliked';
 
     return (
 
-
+       
         < div className="container" style={{ marginTop: '60px' }}>
 
             <div className="row" style={{ minHeight: '80vh', display: 'flex', alignItems: 'center' }}>
@@ -53,8 +59,8 @@ const Home = () => {
                         <div>
                             <div>
                                 <div>{!user && <a href="/login">Login to your account to like/dislike this joke</a>}</div>
-                                {!!user && <button onClick={() => onLikeClick(true)}  className="btn btn-primary">Like</button>}
-                                {!!user && <button onClick={() => onLikeClick(false)}  className="btn btn-danger">Dislike</button>}
+                                {!!user && <button disabled={!canLike} onClick={() => onLikeClick(true)}  className="btn btn-primary">Like</button>}
+                                {!!user && <button disabled={!canDislike} onClick={() => onLikeClick(false)}  className="btn btn-danger">Dislike</button>}
                             </div>
 
                             <br />

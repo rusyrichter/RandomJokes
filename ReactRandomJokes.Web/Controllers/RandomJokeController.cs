@@ -60,7 +60,17 @@ namespace ReactRandomJokes.Web.Controllers
             return repo.GetJokeForCount(jokeId);
           
         }
-
+        [HttpGet]
+        [Route("getstatus")]
+        public Status GetStatus(int id)
+        {
+            var repo = new RJRepository(_connectionString);
+            var repo2 = new UserRepository(_connectionString);
+            var user = repo2.GetByEmail(User.Identity.Name);
+            return repo.GetStatus(id, user.Id);
+           
+        }
+        
     }
 }
 

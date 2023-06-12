@@ -12,8 +12,8 @@ using ReactRandomJokes.Data;
 namespace ReactRandomJokes.Data.Migrations
 {
     [DbContext(typeof(RJDataContext))]
-    [Migration("20230611235411_One after the next")]
-    partial class Oneafterthenext
+    [Migration("20230612014726_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,7 +32,7 @@ namespace ReactRandomJokes.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("JokeId")
+                    b.Property<int>("OriginId")
                         .HasColumnType("int");
 
                     b.Property<string>("Punchline")

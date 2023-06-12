@@ -13,6 +13,7 @@ namespace ReactRandomJokes.Data
     {
         
         public int Id { get; set; }
+
         [JsonPropertyName("JokeId")]
         public int OriginId { get; set; }
         public string Setup { get; set; }

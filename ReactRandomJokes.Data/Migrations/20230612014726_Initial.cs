@@ -4,7 +4,7 @@
 
 namespace ReactRandomJokes.Data.Migrations
 {
-    public partial class Oneafterthenext : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,7 +30,7 @@ namespace ReactRandomJokes.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    JokeId = table.Column<int>(type: "int", nullable: false),
+                    OriginId = table.Column<int>(type: "int", nullable: false),
                     Setup = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Punchline = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<int>(type: "int", nullable: true)
