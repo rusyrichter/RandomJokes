@@ -78,11 +78,16 @@ namespace ReactRandomJokes.Data
             return Status.Disliked;
         }
       
-        public Joke GetJokeForCount(int jokeId)
+        public LikesAndDislikes GetJokeForCount(int jokeId)
         {
             using var context = new RJDataContext(_connectionString);
-            return context.Jokes.Include(j => j.UserLikedJokes)
-                                .FirstOrDefault(j => j.OriginId == jokeId);
+            var likedCount = context.UserLikedJokes.Where(j => j.JokeId == jokeId && j.Liked == true).ToList().Count();
+            var dislikedCount = context.UserLikedJokes.Where(j => j.JokeId == jokeId && j.Liked == false).ToList().Count();
+            return new LikesAndDislikes
+            {
+                Likes = likedCount,
+                DisLikes = dislikedCount,
+            };
         }
 
     }

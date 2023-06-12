@@ -14,8 +14,7 @@ const Home = () => {
         dislikesCount: ''
     })
    
-    
-
+   
     useEffect(() => {
 
         const getJoke = async () => {
@@ -26,11 +25,13 @@ const Home = () => {
         getJoke();
     }, [])
 
-    const updateCounts = async () => {
-        const jokeId = joke.JokeId;
-        const { data } = await axios.get(`/api/randomJoke/getlikescount/${jokeId}`);      
-        setJoke({ ...joke, likesCount: data.likes, dislikesCount: data.dislikes });  
-    }
+    
+        const updateCounts = async () => {
+            const jokeId = joke.jokeId; 
+            const { data } = await axios.get(`/api/randomJoke/getlikescount/${jokeId}`);
+            console.log(data);
+            setJoke({ ...joke, likesCount: data.likes, dislikesCount: data.dislikes });
+        }
 
     setInterval(updateCounts, 500);
 

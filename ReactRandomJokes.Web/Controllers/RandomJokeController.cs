@@ -57,16 +57,8 @@ namespace ReactRandomJokes.Web.Controllers
         public LikesAndDislikes GetLikes(int jokeId)
         {
             var repo = new RJRepository(_connectionString);
-            var joke = repo.GetJokeForCount(jokeId);
-  
-                return new LikesAndDislikes
-                {
-                    Likes = joke.UserLikedJokes.Count(j => j.Liked == true),
-                    DisLikes = joke.UserLikedJokes.Count(j => j.Liked == false)
-
-                };
-            }
-           
+            return repo.GetJokeForCount(jokeId);
+          
         }
 
     }
