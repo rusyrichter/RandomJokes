@@ -27,8 +27,12 @@ namespace ReactRandomJokes.Web.Controllers
         {
             var repo = new RJRepository(_connectionString);
             var joke = repo.GetJoke();
-            repo.AddJokeToDB(joke);
-            return joke;
+            if (!repo.JokeExists(joke.OriginId))
+            {
+                repo.AddJokeToDB(joke);
+                return joke;
+            }
+            return repo.GetByOriginId(joke.OriginId);
         }
 
         [HttpPost]
@@ -57,8 +61,13 @@ namespace ReactRandomJokes.Web.Controllers
         public LikesAndDislikes GetLikes(int jokeId)
         {
             var repo = new RJRepository(_connectionString);
-            return repo.GetJokeForCount(jokeId);
-          
+            var userLikedJokes = repo.GetUserLikedJokes(jokeId);
+            return new LikesAndDislikes
+            {
+                Likes = userLikedJokes.Count(u => u.Liked == true),
+                DisLikes = userLikedJokes.Count(u => u.Liked == false),
+            };
+        
         }
         [HttpGet]
         [Route("getstatus")]
@@ -70,6 +79,7 @@ namespace ReactRandomJokes.Web.Controllers
             return repo.GetStatus(id, user.Id);
            
         }
+
         
     }
 }

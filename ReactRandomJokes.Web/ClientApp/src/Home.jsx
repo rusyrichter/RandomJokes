@@ -7,7 +7,6 @@ const Home = () => {
     const { user } = useAuth();
     const [joke, setJoke] = useState({
         id: '',
-        jokeId: '',
         setup: '',
         punchline: '',
         likesCount: '',
@@ -25,22 +24,26 @@ const Home = () => {
         }
 
         getJoke();
-           
     }, [])
 
-    const updateCounts = async () => {
-        const jokeId = joke.id;
-        const { data } = await axios.get(`/api/randomJoke/getlikescount/${jokeId}`); 
+    const updateCounts = async () => { 
+        if (user) {
+            const { data: interactionStatus } = await axios.get((`/api/randomjoke/getstatus?id=${joke.id}`));
+            setStatus(interactionStatus);
+        }      
+        const { data } = await axios.get(`/api/randomJoke/getlikescount/${joke.id}`);
         setJoke({ ...joke, likesCount: data.likes, dislikesCount: data.disLikes });  
     }
 
 
-    setInterval(updateCounts, 1000);
+    setInterval(updateCounts, 500);
+
 
 
     const onLikeClick = async (liked) => { 
-        const jokeId = joke.id;
-        await axios.post(`/api/randomJoke/addlike`, { jokeId, liked });       
+        const JokeId = joke.id;
+        console.log(joke)
+        await axios.post(`/api/randomJoke/addlike`, { JokeId, liked });       
     }
 
     const canLike = status != 'Liked';
